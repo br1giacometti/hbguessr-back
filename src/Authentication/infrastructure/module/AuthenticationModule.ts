@@ -1,41 +1,45 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
-
 import AuthenticationController from '../controller/AuthenticationController';
 import AuthenticationService from '../../application/service/AuthenticationService';
 import UserDataProvider from '../dataProvider/UserDataProvider';
 import UserRepository from 'Authentication/application/repository/UserRepository';
-
-import JwtStrategy from 'Authentication/infrastructure/strategy/JwtStrategy';
-import LocalStrategy from 'Authentication/infrastructure/strategy/LocalStrategy';
-import UserService from 'Authentication/application/service/UserService';
+import { UserMapperProfile } from '../autoMapper/UserMapperProfile';
+import UserValidations from 'Authentication/application/validations/UserValidations';
+import JwtStrategy from '../strategy/JwtStrategy';
+import { ConfigService, ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import LocalStrategy from '../strategy/LocalStrategy';
+import { LoginResponseProfile } from '../autoMapper/LoginResponseProfile';
+import PayloadValidations from 'Authentication/application/validations/PayloadValidations';
 
 const jwtFactory = {
   imports: [ConfigModule],
   useFactory: async (configService: ConfigService) => ({
-    secret: configService.get('JWT_SECRET_KEY'),
+    secret: 'viajaauto-secret',
     signOptions: {
-      expiresIn: configService.get('JWT_EXP_D'),
+      expiresIn: '999d',
     },
   }),
   inject: [ConfigService],
 };
 
 @Module({
-  imports: [JwtModule.registerAsync(jwtFactory), PassportModule],
   controllers: [AuthenticationController],
   providers: [
     AuthenticationService,
-    LocalStrategy,
-    UserService,
-    JwtStrategy,
     {
       provide: UserRepository,
       useClass: UserDataProvider,
     },
+    UserMapperProfile,
+    LoginResponseProfile,
+    UserValidations,
+    PayloadValidations,
+    JwtStrategy,
+    LocalStrategy,
   ],
-  exports: [AuthenticationService, JwtModule, JwtStrategy, PassportModule],
+  imports: [JwtModule.registerAsync(jwtFactory), PassportModule],
+  exports: [AuthenticationService, JwtModule, JwtStrategy],
 })
 export default class UserModule {}

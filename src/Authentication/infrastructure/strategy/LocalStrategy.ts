@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 
@@ -6,28 +6,46 @@ import * as bcrypt from 'bcrypt';
 
 import User from 'Authentication/domain/models/User';
 
-import UserService from 'Authentication/application/service/UserService';
-import WrongPasswordException from 'Authentication/application/exception/WrongPasswordException';
+import { I18nService } from 'nestjs-i18n';
+import AuthenticationService from 'Authentication/application/service/AuthenticationService';
+import InvalidPasswordException from 'Authentication/application/exception/InvalidPasswordException';
+import UserValidations from 'Authentication/application/validations/UserValidations';
 
 @Injectable()
 export default class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private userService: UserService) {
+  constructor(
+    private userService: AuthenticationService,
+    private readonly i18n: I18nService,
+    private readonly validator: UserValidations,
+  ) {
     super({ usernameField: 'email' });
   }
 
   async validate(email: string, password: string): Promise<User> {
     try {
+      this.validator.validatePassAndEmailFormat(email, password);
       const user = await this.userService.findUserByEmail(email);
-
       const passwordMatch = await bcrypt.compare(password, user.password);
-
       if (!passwordMatch) {
-        throw new WrongPasswordException('Contraseña incorrecta');
+        const pwExc = new InvalidPasswordException();
+        throw new InvalidPasswordException(this.i18n.t(pwExc.message));
       }
-
       return user;
     } catch (error) {
-      throw new UnauthorizedException('Usuario no existe');
+      switch (error.name) {
+        case 'InvalidPasswordException': {
+          throw new HttpException(this.i18n.t(error.message), 404);
+        }
+        case 'UserDoesntExistsException': {
+          throw new HttpException(this.i18n.t(error.message), 404);
+        }
+        case 'InvalidEmailException': {
+          throw new HttpException(this.i18n.t(error.message), 404);
+        }
+        default: {
+          throw new HttpException('Unauthorized', 404);
+        }
+      }
     }
   }
 }

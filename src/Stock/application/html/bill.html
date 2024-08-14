@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Ticket</title>
+	<style type="text/css">
+		* {
+			box-sizing: border-box;
+			-webkit-user-select: none;
+			/* Chrome, Opera, Safari */
+			-moz-user-select: none;
+			/* Firefox 2+ */
+			-ms-user-select: none;
+			/* IE 10+ */
+			user-select: none;
+			/* Standard syntax */
+		}
+
+		.bill-container {
+			border-collapse: collapse;
+			max-width: 8cm;
+			position: absolute;
+			left: 0;
+			right: 0;
+			margin: auto;
+			border-collapse: collapse;
+			font-family: monospace;
+			font-size: 12px;
+		}
+
+		.bill-container .centered {
+			text-align: center;
+			/* Sobrescribe para centrar elementos específicos */
+		}
+
+		.bill-container .righted {
+			text-align: right;
+			/* Sobrescribe para centrar elementos específicos */
+		}
+
+		.fecha-hora {
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
+		}
+
+		.fecha-hora span {
+			display: inline-block;
+		}
+
+		.text-lg {
+			font-size: 20px;
+		}
+
+		.text-sm {
+			font-size: 15px;
+		}
+
+		.text-center {
+			text-align: center;
+		}
+
+
+		#qrcode {
+			width: 75%
+		}
+
+		p {
+			margin: 2px 0;
+		}
+
+		table table {
+			width: 100%;
+		}
+
+
+		table table tr td:last-child {
+			text-align: right;
+		}
+
+		.border-top {
+			border-top: 0px dashed;
+		}
+
+		.padding-b-3 {
+			padding-bottom: 3px;
+		}
+
+		.padding-t-3 {
+			padding-top: 3px;
+		}
+	</style>
+</head>
+
+<body>
+	<table class="bill-container">
+		<tr>
+			<td class="padding-b-3">
+				<b class="centered">
+					<p>ORIENTACION AL CONSUMIDOR DE LA PROVINCIA DE BUENOS AIRES: 0800-222-9042</p>
+				</b>
+				<p>{{personaFiscal}}</p>
+				<p>C.U.I.T. Nro.: {{cuit}}</p>
+				<p>Ing. Brutos: {{IIBB}}</p>
+				<b class="centered text-center text-lg">
+					<p>{{empresa}}</p>
+				</b>
+				<b class="centered">
+					<p>{{domicilioFiscal}}</p>
+				</b>
+				<b class="centered">
+					<p>{{domicilioFiscal2}}</p>
+				</b>
+				<p>Inicio de actividades: 01/01/2017</p>
+				<p>Iva Responsable Inscripto</p>
+				<p class="centered">A CONSUMIDOR FINAL</p>
+				<p class="centered"><b>Cód. 011 - FACTURA C</p></b>
+				<p class="righted">P.V Nro: 0000{{PtoVta}} - Nro T. {{comprobanteNumero}}</p>
+				<p class="fecha-hora">
+					<span>Fecha: {{fechaTicket}}</span>
+					<span>Hora: {{horaTicket}}</span>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="border-top padding-t-3 padding-b-3">
+				<p class="fecha-hora">
+					<span>ART. KIOSCO</span>
+					<span>(21) {{ImpTotal}}.00</span>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="border-top padding-t-3 padding-b-3">
+				<p class="fecha-hora text-sm">
+
+					<span><b>TOTAL</b></span>
+					<span><b>{{ImpTotal}}.00</b></span>
+
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="padding-b-3">
+				<span>RECIBI(MOS)</span>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="fecha-hora">
+
+					<span>Efectivo</span>
+					<span>{{ImpTotal}}.00</span>
+
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="fecha-hora text-sm">
+
+					<span><b>CAMBIO</b></span>
+					<span><b>0.00</b></span>
+
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="padding-b-3">
+				<span>Cajero 1: KIOSKING</span>
+			</td>
+		</tr>
+		<tr class="text-center">
+			<td>
+				<img id="qrcode" src="{{qrCodeUrl}}" alt="QR Code">
+			</td>
+		</tr>
+		<tr>
+			<td class="border-top padding-t-3">
+				<p>CAE: {{cae}}</p>
+				<p>Vto: {{fechaVtoCae}}</p>
+			</td>
+		</tr>
+	</table>
+</body>
+
+</html>

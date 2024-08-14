@@ -1,6 +1,9 @@
-import User from 'Authentication/domain/models/User';
+import { AutoMap } from '@automapper/classes';
+import { UserDto } from './UserDto';
 
-export default interface LoginResponseDto {
-  user: User;
+export class LoginResponseDto {
+  @AutoMap()
   accessToken: string;
+  @AutoMap(() => UserDto)
+  user: UserDto;
 }

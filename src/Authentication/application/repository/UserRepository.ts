@@ -1,10 +1,7 @@
+import BaseGuidRepository from 'Base/repository/BaseGuidRepository';
 import User from '../../domain/models/User';
 
-import BaseRepository from 'Base/repository/BaseRepository';
-
-export default abstract class UserRepository extends BaseRepository<
-  User,
-  string
-> {
-  findUserByEmail: (email: string) => Promise<User | null>;
+export default abstract class UserRepository extends BaseGuidRepository<User> {
+  abstract findUserByEmail: (email: string) => Promise<User | null>;
+  abstract updateLastLogin: (id: string) => Promise<boolean>;
 }

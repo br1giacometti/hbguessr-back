@@ -12,6 +12,8 @@ RUN npx prisma generate
 
 RUN npm run build
 
+EXPOSE 4000
+
 USER node
 
 CMD npm run start:prod

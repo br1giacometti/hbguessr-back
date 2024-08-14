@@ -1,5 +1,5 @@
 export default class InvalidPasswordException extends Error {
-  constructor(message = 'AuthErrors.INVALID_PASSWORD_EXCEPTION') {
+  constructor(message = 'AuthErrors.INVALID_PASSWORD') {
     super(message);
     this.name = 'InvalidPasswordException';
   }

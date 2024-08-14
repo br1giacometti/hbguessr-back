@@ -1,36 +1,44 @@
-import { Exclude } from 'class-transformer';
-import InvalidEmailException from '../exception/InvalidEmailException';
-import Role from './Role';
+import { AutoMap } from '@automapper/classes';
 
 export default class User {
-  name: string;
+  @AutoMap()
+  firstName: string;
+  @AutoMap()
+  lastName: string;
+  @AutoMap()
   email: string;
-  role: Role;
-  @Exclude()
+  @AutoMap()
   password: string;
+  @AutoMap()
+  createdAt: Date;
+  @AutoMap()
+  lastLogin: Date;
+  @AutoMap()
+  googleId: string;
+  @AutoMap()
   id?: string;
+  @AutoMap()
+  cellphoneNumber?: string;
 
   constructor(
-    name: string,
+    firstName: string,
+    lastName: string,
     email: string,
-    role: Role,
     password: string,
+    createdAt: Date,
+    lastLogin: Date,
+    googleId: string,
+    cellphoneNumber?: string,
     id?: string,
   ) {
-    if (!User.validateEmail(email)) {
-      throw new InvalidEmailException();
-    }
-
-    this.name = name;
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.email = email;
-    this.role = role;
     this.password = password;
+    this.createdAt = createdAt;
+    this.lastLogin = lastLogin;
+    this.googleId = googleId;
+    this.cellphoneNumber = cellphoneNumber;
     this.id = id;
   }
-
-  private static readonly validateEmail = (email: string): boolean => {
-    const regex =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return regex.test(String(email).toLowerCase());
-  };
 }

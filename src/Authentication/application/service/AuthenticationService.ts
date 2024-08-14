@@ -1,75 +1,108 @@
 import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 
 import User from '../../domain/models/User';
-import Role from '../../domain/models/Role';
+import * as bcrypt from 'bcrypt';
 
-import LoginResponseDto from '../dto/LoginResponseDto';
+import UserRepository from '../repository/UserRepository';
+import UserNotFoundException from 'Authentication/application/exception/UserNotFoundException';
+import UserValidations from '../validations/UserValidations';
 import { JwtService } from '@nestjs/jwt';
-import SignUpDto from '../dto/SignUpDto';
-import InvalidPasswordException from '../exception/InvalidPasswordException';
-import UserService from './UserService';
+import { TokenPayload } from 'google-auth-library';
+import LoginResponse from 'Authentication/domain/models/LoginResponse';
+import PayloadValidations from '../validations/PayloadValidations';
 
 @Injectable()
 export default class AuthenticationService {
   constructor(
-    private readonly userService: UserService,
+    private readonly repository: UserRepository,
+    private readonly validator: UserValidations,
     private readonly jwtService: JwtService,
+    private readonly payloadValidator: PayloadValidations,
   ) {}
 
-  async login(user: User): Promise<LoginResponseDto> {
-    const payload = { email: user.email, id: user.id };
+  async createUser(user: User): Promise<User> {
+    let passwordHashed = '';
+    if (user.googleId == null)
+      this.validator.validatePassAndEmailFormat(user.email, user.password);
+    if (user.password != null)
+      passwordHashed = await bcrypt.hash(user.password, 10);
 
-    const accessToken = this.jwtService.sign(payload);
+    const userCreated = await this.repository.insert({
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      password: passwordHashed == '' ? null : passwordHashed,
+      createdAt: new Date(),
+      googleId: user.googleId != null ? user.googleId : null,
+      lastLogin: null,
+      cellphoneNumber: null,
+    });
+    return userCreated;
+  }
+
+  async deleteUser(userId: string): Promise<User> {
+    return await this.repository.delete(userId);
+  }
+
+  async findUserByEmail(email: string): Promise<User> {
+    const user = await this.repository.findUserByEmail(email);
+    this.validator.validateExistingUser(user);
+    return user;
+  }
+
+  async findUserById(userId: string): Promise<User> {
+    const user = await this.repository.findById(userId);
+
+    if (user === null) {
+      throw new UserNotFoundException();
+    }
+
+    return user;
+  }
+
+  async fetchAllUsers(): Promise<User[]> {
+    const users = await this.repository.findAll();
+    return users;
+  }
+
+  async googleLogin(payload: TokenPayload): Promise<LoginResponse> {
+    this.payloadValidator.validatePayload(payload);
+    let user: User;
+    user = await this.repository.findUserByEmail(payload.email);
+    if (user == null) {
+      user = await this.createUser({
+        email: payload.email,
+        firstName: payload.given_name,
+        lastName: payload.family_name,
+        createdAt: new Date(),
+        lastLogin: undefined,
+        password: undefined,
+        googleId: payload.aud,
+        cellphoneNumber: undefined,
+      });
+    }
+    await this.repository.updateLastLogin(user.id);
+
+    const accessToken = this.jwtService.sign({
+      email: payload.email,
+      id: user.id,
+    });
 
     return { user, accessToken };
   }
 
-  async signUpAdmin(signUpDto: SignUpDto): Promise<User> {
-    const isPasswordValid = AuthenticationService.validatePassword(
-      signUpDto.password,
+  async login(userParam: User): Promise<LoginResponse> {
+    this.validator.validatePassAndEmailFormat(
+      userParam.email,
+      userParam.password,
     );
-
-    if (!isPasswordValid) {
-      throw new InvalidPasswordException();
-    }
-
-    const passwordHashed = await bcrypt.hash(signUpDto.password, 10);
-
-    const userCreated = await this.userService.createUser({
-      email: signUpDto.email,
-      name: signUpDto.name,
-      role: Role.ADMIN,
-      passwordHashed,
+    const user = await this.findUserByEmail(userParam.email);
+    await this.repository.updateLastLogin(user.id);
+    const accessToken = this.jwtService.sign({
+      email: user.email,
+      id: user.id,
     });
 
-    return userCreated;
-  }
-
-  async signUp(signUpDto: SignUpDto): Promise<User> {
-    const isPasswordValid = AuthenticationService.validatePassword(
-      signUpDto.password,
-    );
-
-    if (!isPasswordValid) {
-      throw new InvalidPasswordException();
-    }
-
-    const passwordHashed = await bcrypt.hash(signUpDto.password, 10);
-
-    const userCreated = await this.userService.createUser({
-      email: signUpDto.email,
-      name: signUpDto.name,
-      role: Role.USER,
-      passwordHashed,
-    });
-
-    return userCreated;
-  }
-
-  private static validatePassword(password: string) {
-    // Is at least 6 characters long, contains at least one leter and contains at least one number
-    const regex = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/;
-    return regex.test(password);
+    return { user, accessToken };
   }
 }

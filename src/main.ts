@@ -3,9 +3,13 @@ import { AppModule } from 'Base/module/AppModule';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
-  await app.listen(process.env.PORT || 4000);
-  console.log(`running on port ${process.env.PORT || 4000} `);
+  app.enableCors({
+    origin: ['http://localhost:3000'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+  await app.listen(process.env.PORT || 3000);
+  console.log(`HBguessr is running on ${process.env.PORT || 3000}`);
 }
 
 bootstrap();
