@@ -33,17 +33,22 @@ export default class GameDataProvider implements GameRepository {
     try {
       const gameEntity = await this.client.create({
         data: {
-          user: { connect: { id: '0c1cd7c5-f768-4b12-be1b-7bfacd91ae35' } },
-          totalScore: 100,
+          user: {
+            connect: {
+              id: game.userId, // Asegúrate de usar la ID del usuario que recibes
+            },
+          },
+          totalScore: game.totalScore, // Usa el valor del score recibido
+          createdAt: game.createdAt, // Usa la fecha recibida
           gameResults: {
             createMany: {
-              data: {
-                locationId: 1,
-                selectedX: 270,
-                selectedY: 120,
-                mapId: 1,
-                score: 0,
-              },
+              data: game.gameResults.map((result) => ({
+                locationId: result.locationId,
+                selectedX: result.selectedX,
+                selectedY: result.selectedY,
+                mapId: result.mapId,
+                score: result.score,
+              })),
             },
           },
         },

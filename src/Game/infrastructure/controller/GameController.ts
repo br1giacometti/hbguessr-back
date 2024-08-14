@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -22,6 +23,7 @@ import { UpdateGameDto } from '../dto/Game/UpdateGameDto';
 import GameService from 'Game/application/service/GameService';
 import { InjectMapper, MapInterceptor } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
+import User from 'Authentication/domain/models/User';
 
 @Controller('Game')
 export default class GameController {
@@ -61,8 +63,11 @@ export default class GameController {
   @Post('/create')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(MapInterceptor(Game, GameDto))
-  async login(@Body() gameDto: CreateGameDto): Promise<GameDto> {
-    console.log('game controller', gameDto);
+  async login(
+    @Body() gameDto: CreateGameDto,
+    @Req() request: Request & { user: User },
+  ): Promise<GameDto> {
+    gameDto.userId = request.user.id;
     return this.GameService.createGame(
       await this.mapper.mapAsync(gameDto, CreateGameDto, Game),
     )
