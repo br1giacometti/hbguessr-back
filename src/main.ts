@@ -9,6 +9,8 @@ async function bootstrap() {
       'https://hbguessr-front-zkl6.vercel.app',
       'https://hbguessr-back.onrender.com',
       'https://hbguessr-front-zkl6.vercel.app/',
+      'https://hbguessr-front.vercel.app/',
+      'https://hbguessr-front.vercel.app',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
