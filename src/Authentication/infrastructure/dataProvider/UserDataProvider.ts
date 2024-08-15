@@ -42,6 +42,7 @@ export default class UserDataProvider implements UserRepository {
           googleId: user.googleId,
           cellphoneNumber:
             user.cellphoneNumber != null ? user.cellphoneNumber : null,
+          rol: 'ADMIN',
         },
       });
 
