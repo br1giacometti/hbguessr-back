@@ -15,6 +15,8 @@ export default class MapService {
     const mapCreated = await this.repository.insert({
       name: map.name,
       id: map.id,
+      sizeX: map.sizeX,
+      sizeY: map.sizeY,
       imageUrl: map.imageUrl,
     });
     return mapCreated;

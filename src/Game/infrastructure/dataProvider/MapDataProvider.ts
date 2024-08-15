@@ -33,6 +33,8 @@ export default class MapDataProvider implements MapRepository {
         data: {
           name: map.name,
           imageUrl: map.imageUrl,
+          sizeX: map.sizeX,
+          sizeY: map.sizeY,
         },
       });
 

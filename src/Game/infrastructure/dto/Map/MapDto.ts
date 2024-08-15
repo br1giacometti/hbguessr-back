@@ -7,6 +7,10 @@ export class MapDto {
   @AutoMap()
   name: string;
   @AutoMap()
+  sizeX: number;
+  @AutoMap()
+  sizeY: number;
+  @AutoMap()
   imageUrl: string;
   @AutoMap(() => Location)
   locations?: Location[];

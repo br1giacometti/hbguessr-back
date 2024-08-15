@@ -5,9 +5,6 @@ export class UpdateMapDto {
   @AutoMap()
   description: string;
 
-  @AutoMap()
-  hectares: number;
-
   @AutoMap(() => Location)
   locations?: Location[];
 }

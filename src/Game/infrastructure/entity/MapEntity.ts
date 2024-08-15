@@ -9,6 +9,10 @@ class MapEntity implements IMapEntity {
   name: string;
   @AutoMap()
   imageUrl: string;
+  @AutoMap()
+  sizeX: number;
+  @AutoMap()
+  sizeY: number;
   @AutoMap(() => LocationEntity)
   locations?: LocationEntity[];
 }

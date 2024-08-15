@@ -10,6 +10,12 @@ export class CreateMapDto {
   @AutoMap()
   imageUrl: string;
 
+  @AutoMap()
+  sizeX: number;
+
+  @AutoMap()
+  sizeY: number;
+
   @AutoMap(() => Location)
   locations?: Location[];
 

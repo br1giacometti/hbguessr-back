@@ -1,4 +1,5 @@
 import { AutoMap } from '@automapper/classes';
+import Map from './Map';
 
 export default class Location {
   @AutoMap()

@@ -1,4 +1,5 @@
 import { AutoMap } from '@automapper/classes';
+import Map from 'Game/domain/models/Map';
 import CreateLocationSchema from 'Game/infrastructure/schema/CreateLocationSchema';
 import { z } from 'zod';
 

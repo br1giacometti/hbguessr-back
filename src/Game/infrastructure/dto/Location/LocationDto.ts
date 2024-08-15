@@ -1,4 +1,5 @@
 import { AutoMap } from '@automapper/classes';
+import Map from 'Game/domain/models/Map';
 
 export class LocationDto {
   @AutoMap()

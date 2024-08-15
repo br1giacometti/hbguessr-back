@@ -157,6 +157,8 @@ model Map {
   imageUrl   String       @unique
   locations  Location[]
   GameResult GameResult[]
+  sizeX      Int
+  sizeY      Int
 }
 
 model Location {

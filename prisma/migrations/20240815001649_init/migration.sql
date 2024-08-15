@@ -151,6 +151,8 @@ CREATE TABLE "Map" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "imageUrl" TEXT NOT NULL,
+    "sizeX" INTEGER NOT NULL,
+    "sizeY" INTEGER NOT NULL,
 
     CONSTRAINT "Map_pkey" PRIMARY KEY ("id")
 );
