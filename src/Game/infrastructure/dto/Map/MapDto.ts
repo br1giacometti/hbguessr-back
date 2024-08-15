@@ -12,6 +12,8 @@ export class MapDto {
   sizeY: number;
   @AutoMap()
   imageUrl: string;
+  @AutoMap()
+  ubication?: number;
   @AutoMap(() => Location)
   locations?: Location[];
 }

@@ -20,6 +20,8 @@ class UserEntity implements IUserEntity {
   lastLogin: Date;
   @AutoMap()
   createdAt: Date;
+  @AutoMap()
+  rol: string;
 }
 
 export default UserEntity;

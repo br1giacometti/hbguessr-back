@@ -45,6 +45,7 @@ model User {
   cellphoneNumber     String?
   movimientoStockUser StockMovement[] @relation("user")
   games               Game[]
+  rol                 String?
 }
 
 model Category {
@@ -159,6 +160,7 @@ model Map {
   GameResult GameResult[]
   sizeX      Int
   sizeY      Int
+  ubication  Int?
 }
 
 model Location {

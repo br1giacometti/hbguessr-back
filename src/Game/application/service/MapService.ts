@@ -18,6 +18,7 @@ export default class MapService {
       sizeX: map.sizeX,
       sizeY: map.sizeY,
       imageUrl: map.imageUrl,
+      ubication: map.ubication,
     });
     return mapCreated;
   }

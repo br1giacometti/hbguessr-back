@@ -36,6 +36,7 @@ export default class AuthenticationService {
       googleId: user.googleId != null ? user.googleId : null,
       lastLogin: null,
       cellphoneNumber: null,
+      rol: user.rol,
     });
     return userCreated;
   }

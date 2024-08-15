@@ -19,4 +19,6 @@ export class UserDto {
   createdAt: Date;
   @AutoMap()
   cellphoneNumber?: string;
+  @AutoMap()
+  rol?: string;
 }

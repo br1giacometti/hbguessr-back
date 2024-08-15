@@ -35,6 +35,7 @@ export default class MapDataProvider implements MapRepository {
           imageUrl: map.imageUrl,
           sizeX: map.sizeX,
           sizeY: map.sizeY,
+          ubication: map.ubication,
         },
       });
 
@@ -57,10 +58,16 @@ export default class MapDataProvider implements MapRepository {
     });
     return this.classMapper.mapAsync(mapEntity, MapEntity, Map);
   }
-
   async findAll(): Promise<Map[]> {
-    const mapes = await this.client.findMany({ include: { locations: true } });
+    // Obtiene los mapas, incluyendo la relación con las ubicaciones
+    const mapes = await this.client.findMany({
+      include: { locations: true },
+      orderBy: {
+        ubication: 'asc', // Ordena por 'ubication' de manera ascendente
+      },
+    });
 
+    // Mapea los datos a la entidad Map
     return this.classMapper.mapArrayAsync(mapes, MapEntity, Map);
   }
 

@@ -5,14 +5,22 @@ import LocationEntity from './LocationEntity';
 class MapEntity implements IMapEntity {
   @AutoMap()
   id: number;
+
   @AutoMap()
   name: string;
+
   @AutoMap()
   imageUrl: string;
+
   @AutoMap()
   sizeX: number;
+
   @AutoMap()
   sizeY: number;
+
+  @AutoMap()
+  ubication: number; // Esto es opcional en MapEntity
+
   @AutoMap(() => LocationEntity)
   locations?: LocationEntity[];
 }

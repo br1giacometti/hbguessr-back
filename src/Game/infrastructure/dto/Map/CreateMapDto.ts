@@ -16,6 +16,9 @@ export class CreateMapDto {
   @AutoMap()
   sizeY: number;
 
+  @AutoMap()
+  ubication?: number;
+
   @AutoMap(() => Location)
   locations?: Location[];
 

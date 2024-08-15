@@ -7,4 +7,7 @@ export class UpdateMapDto {
 
   @AutoMap(() => Location)
   locations?: Location[];
+
+  @AutoMap()
+  ubication?: number;
 }

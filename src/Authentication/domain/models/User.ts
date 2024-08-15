@@ -19,6 +19,8 @@ export default class User {
   id?: string;
   @AutoMap()
   cellphoneNumber?: string;
+  @AutoMap()
+  rol?: string;
 
   constructor(
     firstName: string,
@@ -28,6 +30,7 @@ export default class User {
     createdAt: Date,
     lastLogin: Date,
     googleId: string,
+    rol: string,
     cellphoneNumber?: string,
     id?: string,
   ) {
@@ -40,5 +43,6 @@ export default class User {
     this.googleId = googleId;
     this.cellphoneNumber = cellphoneNumber;
     this.id = id;
+    this.rol = rol;
   }
 }
