@@ -16,7 +16,7 @@ export default class GameService {
     console.log('game seriver', game);
     const gameCreated = await this.repository.insert({
       createdAt: new Date(),
-      totalScore: 0,
+      totalScore: game.totalScore,
       userId: game.userId,
       gameResults: game.gameResults,
     });

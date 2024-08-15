@@ -53,7 +53,7 @@ export default class GameDataProvider implements GameRepository {
           },
         },
         include: {
-          gameResults: true,
+          gameResults: { include: { location: true, map: true } },
           user: true,
         },
       });
@@ -77,7 +77,7 @@ export default class GameDataProvider implements GameRepository {
         where: { id },
         include: {
           user: true, // Incluye información del usuario
-          gameResults: true, // Incluye todos los resultados del juego
+          gameResults: { include: { location: true, map: true } },
         },
       });
       if (!gameEntity) {
@@ -106,6 +106,10 @@ export default class GameDataProvider implements GameRepository {
         },
         user: true,
       },
+      orderBy: {
+        totalScore: 'asc', // Ordenar por totalScore en orden descendente
+      },
+      take: 50, // Limitar a los 50 resultados principales
     });
 
     return this.classMapper.mapArrayAsync(games, GameEntity, Game);

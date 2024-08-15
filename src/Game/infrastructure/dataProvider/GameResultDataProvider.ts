@@ -77,7 +77,9 @@ export default class GameResultDataProvider implements GameResultRepository {
   }
 
   async findAll(): Promise<GameResult[]> {
-    const gameresults = await this.client.findMany();
+    const gameresults = await this.client.findMany({
+      include: { location: true, map: true },
+    });
 
     return this.classMapper.mapArrayAsync(
       gameresults,
