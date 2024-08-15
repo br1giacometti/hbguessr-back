@@ -83,6 +83,9 @@ export default class MapDataProvider implements MapRepository {
         data: {
           name: partialMap.name,
           imageUrl: partialMap.imageUrl,
+          sizeX: partialMap.sizeX,
+          sizeY: partialMap.sizeY,
+          ubication: partialMap.ubication,
         },
         where: {
           id,

@@ -27,6 +27,9 @@ export default class MapService {
     const mapCreated = await this.repository.update(id, {
       imageUrl: map.imageUrl,
       name: map.name,
+      ubication: map.ubication,
+      sizeX: map.sizeX,
+      sizeY: map.sizeY,
     });
     return mapCreated;
   }
